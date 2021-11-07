@@ -1,9 +1,8 @@
 var express = require("express");
 var router = express.Router();
+var postController = require("../controllers/postController");
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.json({ msg: "json works" });
-});
+router.get("/", postController.index);
 
 module.exports = router;
