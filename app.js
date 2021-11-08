@@ -4,10 +4,19 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var passport = require("passport");
+var cors = require("cors");
 
+require("./helpers/passport");
+
+//routes
 var indexRouter = require("./routes/index");
+var postsRouter = require("./routes/posts");
+var usersRouter = require("./routes/users");
+var commentsRouter = require("./routes/comments");
 
 var app = express();
+app.use(cors());
 
 // mongoDB
 var mongoose = require("mongoose");
@@ -27,7 +36,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+//routers
 app.use("/", indexRouter);
+app.use("/api/posts", postsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/comments", commentsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -42,7 +55,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.send(err);
 });
 
 module.exports = app;
