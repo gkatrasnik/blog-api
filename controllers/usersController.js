@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
-const post = require("../models/post");
 const helper = require("../helpers/helper");
 
 exports.register_POST = (req, res, next) => {
@@ -86,6 +85,15 @@ exports.profile_GET = (req, res, next) => {
   return res.json(req.user);
 };
 
-exports.protected_GET = (req, res, next) => {
-  return res.json({ message: "get protected successfull" });
+//get list of users
+exports.list_GET = (req, res, next) => {
+  User.find()
+    .sort([["username", "ascending"]])
+    .exec(function (err, list_users) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so send
+      res.json(list_users);
+    });
 };
