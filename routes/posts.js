@@ -1,10 +1,13 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const postsController = require("../controllers/postsController");
 const passport = require("passport");
+var commentsRouter = require("./comments");
+
+router.use("/:postId/comments", commentsRouter);
 
 //Get lists of posts
-router.get("/", postsController.list_GET);
+router.get("/", postsController.posts_list_GET);
 
 // protected
 router.get(
@@ -20,7 +23,7 @@ router.get(
 );
 
 // get post
-router.get("/:id", postsController.post_GET);
+router.get("/:postId", postsController.post_GET);
 
 //protected
 
@@ -33,15 +36,16 @@ router.post(
 
 // delete post
 router.delete(
-  "/:id",
+  "/:postId",
   passport.authenticate("jwt", { session: false }),
   postsController.post_DELETE
 );
 
 // update post
 router.put(
-  "/:id",
+  "/:postId",
   passport.authenticate("jwt", { session: false }),
   postsController.post_PUT
 );
+
 module.exports = router;

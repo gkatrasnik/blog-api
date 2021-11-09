@@ -3,8 +3,9 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var CommentSchema = new Schema({
-  author: { type: String, required },
-  content: { type: String, required },
+  author: { type: String, required: true },
+  content: { type: String, required: true },
+  postId: { type: String },
   timestamp: { type: Date, default: Date.now },
 });
 

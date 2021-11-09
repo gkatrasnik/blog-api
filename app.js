@@ -13,7 +13,6 @@ require("./helpers/passport");
 var indexRouter = require("./routes/index");
 var postsRouter = require("./routes/posts");
 var usersRouter = require("./routes/users");
-var commentsRouter = require("./routes/comments");
 
 var app = express();
 app.use(cors());
@@ -38,9 +37,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //routers
 app.use("/", indexRouter);
-app.use("/api/posts", postsRouter);
+
 app.use("/api/users", usersRouter);
-app.use("/api/comments", commentsRouter);
+app.use("/api/posts", postsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,7 +1,8 @@
 const Post = require("../models/post");
+const Comment = require("../models/comment");
 
 //get list of published posts
-exports.list_GET = (req, res, next) => {
+exports.posts_list_GET = (req, res, next) => {
   Post.find()
     .sort([["timestamp", "ascending"]])
     .exec(function (err, list_posts) {
@@ -63,7 +64,7 @@ exports.post_POST = (req, res, next) => {
 
 // get post
 exports.post_GET = (req, res, next) => {
-  Post.findById(req.params.id)
+  Post.findById(req.params.postId)
     .populate("user")
     .exec(function (err, post) {
       if (err) {
@@ -79,17 +80,27 @@ exports.post_GET = (req, res, next) => {
 
 //delete post
 exports.post_DELETE = (req, res) => {
-  Post.findByIdAndDelete(req.params.id, (err, deletedPost) => {
-    if (err) {
-      return res.status(409).json({ success: false, msg: err.message });
-    } else {
-      res.status(200).json({
-        success: true,
-        msg: "Post deleted",
-        post: deletedPost,
-      });
-    }
-  });
+  var comments = function (callback) {
+    Comment.find({ postId: req.params.postId }).exec(callback);
+  };
+
+  if (comments.length > 0) {
+    // Post has comments. first delete comments.
+    res.json({ msg: "Delete all the comments first." });
+    return;
+  } else {
+    Post.findByIdAndDelete(req.params.postId, (err, deletedPost) => {
+      if (err) {
+        return res.status(409).json({ success: false, msg: err.message });
+      } else {
+        res.status(200).json({
+          success: true,
+          msg: "Post deleted",
+          post: deletedPost,
+        });
+      }
+    });
+  }
 };
 
 //update post
@@ -102,11 +113,11 @@ exports.post_PUT = (req, res) => {
     comments: [],
     timestamp: Date.now(),
     published: published,
-    _id: req.params.id,
+    _id: req.params.postId,
   });
 
   Post.findByIdAndUpdate(
-    req.params.id,
+    req.params.postId,
     updatedPost,
     function (err, updatedpost) {
       if (err) {
