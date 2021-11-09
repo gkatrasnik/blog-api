@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 
 app.use("/api/users", usersRouter);
-app.use("/api/posts", postsRouter);
+app.use("/api/posts", postsRouter); // comments router is nested in posts
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
