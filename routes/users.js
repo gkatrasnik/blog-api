@@ -10,12 +10,11 @@ router.get("/", function (req, res, next) {
 });
 
 // JWT token test route
-router.get("/protected", (req, res) => {
-  res.status(200).json({
-    success: true,
-    msg: "You accessed protected route with JWT token successfully! ",
-  });
-});
+router.get(
+  "/protected",
+  passport.authenticate("jwt", { session: false }),
+  userController.protected_GET
+);
 
 router.post("/login", userController.login_POST);
 

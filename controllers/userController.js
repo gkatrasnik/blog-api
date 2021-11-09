@@ -85,3 +85,7 @@ exports.login_POST = async (req, res, next) => {
 exports.profile_GET = (req, res, next) => {
   return res.json(req.user);
 };
+
+exports.protected_GET = (req, res, next) => {
+  return res.json({ message: "get protected successfull" });
+};

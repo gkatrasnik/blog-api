@@ -1,7 +1,7 @@
 const jsonwebtoken = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 
-const secretKey = process.env.SECRET;
+const secretKey = "secret";
 
 function issueJWT(user) {
   const _id = user._id;
@@ -16,7 +16,7 @@ function issueJWT(user) {
     expiresIn: expiresIn,
   });
 
-  return { token: "Bearer " + signedToken, expires: expiresIn };
+  return { token: signedToken, expires: expiresIn };
 }
 
 module.exports.issueJWT = issueJWT;

@@ -17,6 +17,7 @@ var commentsRouter = require("./routes/comments");
 
 var app = express();
 app.use(cors());
+app.use(passport.initialize());
 
 // mongoDB
 var mongoose = require("mongoose");
@@ -33,7 +34,6 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 //routers
