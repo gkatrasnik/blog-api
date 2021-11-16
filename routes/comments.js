@@ -11,11 +11,7 @@ router.get("/:commentId", commentsController.comment_GET);
 //protected
 
 // create new comment
-router.post(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  commentsController.comment_POST
-);
+router.post("/", commentsController.comment_POST);
 
 // delete post
 router.delete(

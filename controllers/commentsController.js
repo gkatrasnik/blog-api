@@ -3,8 +3,9 @@ const Post = require("../models/post");
 
 //get list of published posts
 exports.comment_list_GET = (req, res, next) => {
-  postid = req.params.postId;
-  Comment.find({ id: postid })
+  const postid = req.params.postId;
+
+  Comment.find({ postId: postid })
     .sort([["timestamp", "ascending"]])
     .exec(function (err, list_comments) {
       if (err) {
@@ -30,14 +31,15 @@ exports.comment_POST = (req, res, next) => {
   newComment
     .save()
     .then((comment) => {
+      console.log(comment);
       Post.findByIdAndUpdate(
         postid,
-        { $push: { comments: comment._id } },
+        { $push: { comments: comment } },
         (err, post) => {
           if (err) {
             return res.status(500).json({ success: false, msg: err.message });
           }
-          res.status(200).json({ success: true, comment });
+          res.status(200).json({ success: true, post });
         }
       );
     })

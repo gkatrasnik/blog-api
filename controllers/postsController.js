@@ -4,6 +4,8 @@ const Comment = require("../models/comment");
 //get list of published posts
 exports.posts_list_GET = (req, res, next) => {
   Post.find()
+    .populate("comments")
+    .populate("user")
     .sort([["timestamp", "ascending"]])
     .exec(function (err, list_posts) {
       if (err) {
@@ -66,6 +68,7 @@ exports.post_POST = (req, res, next) => {
 exports.post_GET = (req, res, next) => {
   Post.findById(req.params.postId)
     .populate("user")
+    .populate("comments")
     .exec(function (err, post) {
       if (err) {
         return res.status(500).json({ success: false, msg: err.message });
