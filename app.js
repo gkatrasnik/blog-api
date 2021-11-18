@@ -17,7 +17,11 @@ var postsRouter = require("./routes/posts");
 var usersRouter = require("./routes/users");
 
 var app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(passport.initialize());
 app.use(helmet());
 app.use(compression());
