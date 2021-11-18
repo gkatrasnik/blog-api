@@ -11,20 +11,16 @@ var helmet = require("helmet");
 
 require("./helpers/passport");
 
+var app = express();
+app.use(cors());
+app.use(passport.initialize());
+app.use(helmet());
+app.use(compression());
+
 //routes
 var indexRouter = require("./routes/index");
 var postsRouter = require("./routes/posts");
 var usersRouter = require("./routes/users");
-
-var app = express();
-app.use(
-  cors({
-    origin: "*",
-  })
-);
-app.use(passport.initialize());
-app.use(helmet());
-app.use(compression());
 
 // mongoDB
 var mongoose = require("mongoose");
