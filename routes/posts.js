@@ -6,16 +6,17 @@ var commentsRouter = require("./comments");
 
 router.use("/:postId/comments", commentsRouter);
 
-//Get lists of posts
-router.get("/", postsController.posts_list_GET);
+// everyone can see published post, also from user app
+router.get("/", postsController.list_published_GET);
 
-// protected
+//All posts can only be seen from admin app
 router.get(
-  "/published",
+  "/all",
   passport.authenticate("jwt", { session: false }),
-  postsController.list_published_GET
+  postsController.posts_list_GET
 );
 
+//unpublished posts can only be seen from admin app
 router.get(
   "/unpublished",
   passport.authenticate("jwt", { session: false }),
