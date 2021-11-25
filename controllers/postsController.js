@@ -95,7 +95,7 @@ exports.post_DELETE = (req, res) => {
     }
   });
 
-  //deletes all comments on this post too
+  //deletes all comments on this post too.
   Comment.deleteMany({ postId: req.params.postId })
     .then(function () {
       console.log("Data deleted"); // Success
