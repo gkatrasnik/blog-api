@@ -83,27 +83,26 @@ exports.post_GET = (req, res, next) => {
 
 //delete post
 exports.post_DELETE = (req, res) => {
-  var comments = function (callback) {
-    Comment.find({ postId: req.params.postId }).exec(callback);
-  };
+  Post.findByIdAndDelete(req.params.postId, (err, deletedPost) => {
+    if (err) {
+      return res.status(409).json({ success: false, msg: err.message });
+    } else {
+      res.status(200).json({
+        success: true,
+        msg: "Post deleted",
+        post: deletedPost,
+      });
+    }
+  });
 
-  if (comments.length > 0) {
-    // Post has comments. first delete comments.
-    res.json({ msg: "Delete all the comments first." });
-    return;
-  } else {
-    Post.findByIdAndDelete(req.params.postId, (err, deletedPost) => {
-      if (err) {
-        return res.status(409).json({ success: false, msg: err.message });
-      } else {
-        res.status(200).json({
-          success: true,
-          msg: "Post deleted",
-          post: deletedPost,
-        });
-      }
+  //deletes all comments on this post too
+  Comment.deleteMany({ postId: req.params.postId })
+    .then(function () {
+      console.log("Data deleted"); // Success
+    })
+    .catch(function (error) {
+      console.log(error); // Failure
     });
-  }
 };
 
 //update post
